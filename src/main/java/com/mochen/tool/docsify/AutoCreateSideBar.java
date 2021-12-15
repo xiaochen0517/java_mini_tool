@@ -14,22 +14,49 @@ public class AutoCreateSideBar {
     private static final Logger log = LogManager.getLogger();
 
     public static void main(String[] args) {
-        String path = "E:/workspace/LearnProject/docsify/learning-notes";
+//        String path = "E:/workspace/LearnProject/docsify/learning-notes";
+        String path = "F:/WorkSpace/learn_code/docsify/learning-notes";
         List<FilesMap> files = getFiles(path, "");
 
-        outFiles(files, "");
+        outFiles(files, "", 0, null);
 //        createReadMeMd(path, "", "_sidebar.md");
 //        removeReadMeMd(path, "");
     }
 
-//    private static int count = 0;
+    private static int start = 3;
+    private static int end = 10;
 
-    public static void outFiles(List<FilesMap> files, String front) {
+    public static void outFiles(List<FilesMap> files, String front, int hierarchy, String upper) {
+        if (upper != null && start > 0 && start == hierarchy){
+            System.out.println(String.format("* [< 返回首页](/)"));
+        }
+
         for (FilesMap fm : files) {
-//            log.info(front+"* [{}]({})", fm.getName(), fm.getPath().replaceAll(" ", "%20"));
-            System.out.println(String.format(front+"* [%s](%s)", fm.getName(), fm.getPath().replaceAll(" ", "%20")));
+            if (hierarchy >= start){
+                // 输出内容
+                if (hierarchy == end-1){
+                    if (fm.getType() == '0'){
+                        System.out.println(String.format(front+"* [%s](%s)", fm.getName(), fm.getPath().replaceAll(" ", "%20")));
+                    }else{
+                        System.out.println(String.format(front+"* [**%s**](%s)", fm.getName(), fm.getPath().replaceAll(" ", "%20")));
+                    }
+                }else{
+                    if (fm.getType() == '0'){
+                        System.out.println(String.format(front+"* [%s](%s)", fm.getName(), fm.getPath().replaceAll(" ", "%20")));
+                    }else{
+                        System.out.println(String.format(front+"* **%s**", fm.getName()));
+                    }
+                }
+            }
+
+            hierarchy++;
+            if (hierarchy >= end) {
+                hierarchy --;
+                continue;
+            }
             if (fm.getChilds() != null) {
-                outFiles(fm.getChilds(), front+"  ");
+                outFiles(fm.getChilds(), front+"  ", hierarchy, fm.getPath());
+                hierarchy --;
             }
         }
 
@@ -56,6 +83,7 @@ public class AutoCreateSideBar {
                 filesMap.setPath(absPath + "/" + name);
                 filesMap.setChilds(null);
             } else if (tempList[i].isDirectory()) {
+                if(name.equals("photo")) continue;
                 // 当前的路径是一个目录，这个目录下有我们生成的README.md，将在此文件夹中生成一个侧边栏文件_sidebar.md
                 List<FilesMap> files = getFiles(path + "/" + name, absPath + "/" + name);
                 filesMap.setType('1');
