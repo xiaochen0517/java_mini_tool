@@ -9,6 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * 此工具类用于生成docsify侧边栏
+ * 由于文件过多导致无法手动写入侧边栏文件目录，
+ * 所以使用自动生成+复制的方法进行操作
+ * @author LiXingChen
+ */
 public class AutoCreateSideBar {
 
     private static final Logger log = LogManager.getLogger();

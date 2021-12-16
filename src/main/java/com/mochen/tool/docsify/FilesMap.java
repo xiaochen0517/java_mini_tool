@@ -6,11 +6,19 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * 用于储存文件或文件夹信息
+ *
+ * @author LiXingChen
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class FilesMap {
 
+    /**
+     * 类型 0 文件，1 文件夹
+     */
     private char type;
 
     private String name;
